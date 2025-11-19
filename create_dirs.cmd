@@ -1,0 +1,14 @@
+@echo off
+mkdir design
+mkdir docs
+mkdir infra
+mkdir scripts
+mkdir tests
+mkdir web
+mkdir web\public
+mkdir web\src
+mkdir web\src\components
+mkdir web\src\layouts
+mkdir web\src\pages
+mkdir web\src\styles
+mkdir web\src\utils
