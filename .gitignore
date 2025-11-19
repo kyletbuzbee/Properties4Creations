@@ -1,8 +1,18 @@
-__pycache__/
-.venv/
+# Ignore environment variable files
+.env
+env.local
+.next/
+out/
+build/
 node_modules/
+.env
+.env.local
+.DS_Store
+.vscode/
+.idea/
 *.log
 *.tmp
-models/*.onnx
-models/*.xml
-datasets/
+.cache/
+__pycache__/
+.venv/
+

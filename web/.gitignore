@@ -1,0 +1,15 @@
+# .gitignore
+.next/
+out/
+build/
+node_modules/
+.env
+.env.local
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.tmp
+.cache/
+__pycache__/
+.venv/
