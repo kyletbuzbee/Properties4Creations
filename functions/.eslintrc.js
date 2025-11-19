@@ -6,31 +6,28 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "google",
+    "plugin:@typescript-eslint/recommended",
   ],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2020,
+    project: ["tsconfig.json", "tsconfig.dev.json"],
     sourceType: "module",
   },
+  ignorePatterns: [
+    "/lib/**/*", // Ignore built files.
+    "/generated/**/*", // Ignore generated files.
+  ],
+  plugins: [
+    "@typescript-eslint",
+    "import",
+  ],
   rules: {
     "quotes": ["error", "double"],
-    "comma-dangle": ["error", "always"],
-    "object-curly-spacing": ["error", "always"],
-    "no-console": "off", // Allow console.log in functions
+    "import/no-unresolved": 0,
+    "indent": ["error", 2],
   },
-  ignorePatterns: ["lib/**", "node_modules/**", "*.js"],
-  overrides: [{
-    files: ["*.ts"],
-    parserOptions: {
-      project: null
-    },
-    extends: [
-      "eslint:recommended",
-    ],
-    rules: {
-      "quotes": ["error", "double"],
-      "comma-dangle": ["error", "always"],
-      "object-curly-spacing": ["error", "always"],
-      "no-console": "off",
-    }
-  }]
 };

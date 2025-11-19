@@ -1,37 +1,9 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Admin email validation for Properties 4 Creations
-    function isAdmin() {
-      return request.auth != null &&
-             request.auth.token.email.matches('.*@properties4creations.com');
-    }
-
-    // Content collections - READ-ONLY for public, ADMIN write
-    match /projects/{projectId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /teamMembers/{teamId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /testimonials/{testimonialId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    match /resources/{resourceId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // Leads collection - PUBLIC submission, ADMIN management
-    match /leads/{leadId} {
-      allow create: if true;  // Public form submissions
-      allow read, update: if isAdmin(); // Admin CRM operations
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
