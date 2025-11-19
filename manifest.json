@@ -1,0 +1,6 @@
+{
+  "name": "website-architect",
+  "displayName": "Website Architect (Google + Designer)",
+  "version": "2.1.0",
+  "intents": "scaffold_project, generate_cms_schema, create_repo_scaffold, emit_ci_workflow, generate_api_stubs, create_seed_data, produce_deploy_infra, audit_accessibility, generate_lighthouse_pipeline, produce_handoff_bundle, design_wireframes, produce_design_tokens, run_design_audit"
+}

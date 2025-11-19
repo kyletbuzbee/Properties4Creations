@@ -117,6 +117,9 @@ This document defines the Firestore collections and document structures for the 
 
 **Security**: Create public for form submissions. Read/update restricted to authenticated admin/contractor roles.
 
+**Additional Fields for Production:**
+- processing_log (Array<{timestamp: string, action: string, result: string, error?: string}>): Audit log for debugging sync failures with SendGrid or Google Sheets
+
 ## Indexes and Queries
 Firestore auto-indexes fields used in queries. Custom indexes may be needed for:
 - projects by city, veteran_focus, status

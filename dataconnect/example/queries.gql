@@ -1,0 +1,27 @@
+mutation CreateUser($displayName: String!, $email: String!, $userType: String!) @auth(level: USER) {
+  user_insert(data: {displayName: $displayName, email: $email, userType: $userType})
+}
+
+query ListProperties @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  properties {
+    id
+    title
+    address
+    dailyRate
+    propertyType
+    maxGuests
+  }
+}
+
+mutation CreateReview($bookingId: UUID!, $creativeProfessionalId: UUID!, $propertyId: UUID!, $comment: String!, $rating: Int!) @auth(level: USER) {
+  review_insert(data: {bookingId: $bookingId, creativeProfessionalId: $creativeProfessionalId, propertyId: $propertyId, comment: $comment, rating: $rating, createdAt_expr: "request.time"})
+}
+
+query GetUserProperties($ownerId: UUID!) @auth(level: USER) {
+  properties(where: {ownerId: {eq: $ownerId}}) {
+    id
+    title
+    address
+    dailyRate
+  }
+}

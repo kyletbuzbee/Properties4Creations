@@ -1,0 +1,36 @@
+mutation CreateDemoData @transaction @auth(level: PUBLIC, insecureReason: "This operation is to seed the database with public demo data.") {
+  user_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      displayName: "demouser1",
+      email: "demouser1@example.com",
+      userType: "creative"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      displayName: "demouser2",
+      email: "demouser2@example.com",
+      userType: "client"
+    }
+  ])
+  property_insertMany(data: [
+    {
+      id: "650e8400-e29b-41d4-a716-446655440002",
+      ownerId: "550e8400-e29b-41d4-a716-446655440000",
+      address: "123 Main St",
+      dailyRate: 100.0,
+      description: "Example property 1",
+      propertyType: "studio",
+      title: "Demo Studio"
+    },
+    {
+      id: "750e8400-e29b-41d4-a716-446655440003",
+      ownerId: "550e8400-e29b-41d4-a716-446655440001",
+      address: "456 Elm St",
+      dailyRate: 150.0,
+      description: "Example property 2",
+      propertyType: "loft",
+      title: "Demo Loft"
+    }
+  ])
+}

@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html, body {
+    font-family: var(--font-inter);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-merriweather);
+  }
+}
+
+@layer components {
+  .brand-navy { @apply text-brand-navy; }
+  .brand-red { @apply text-brand-red; }
+  .brand-olive { @apply text-brand-olive; }
+  .brand-slate { @apply text-brand-slate; }
+  .brand-sand { @apply bg-brand-sand; }
+
+  .btn-primary {
+    @apply bg-brand-red hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red;
+  }
+
+  .btn-secondary {
+    @apply bg-brand-navy hover:bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-navy;
+  }
+}

@@ -1,0 +1,47 @@
+type User @table {
+  displayName: String!
+  email: String!
+  userType: String!
+  phoneNumber: String
+  profilePictureUrl: String
+  bio: String
+}
+
+type Property @table {
+  owner: User!
+  title: String!
+  address: String!
+  description: String!
+  propertyType: String!
+  dailyRate: Float!
+  hourlyRate: Float
+  minBookingHours: Int
+  maxGuests: Int
+  amenities: [String]
+}
+
+type Image @table {
+  property: Property!
+  imageUrl: String!
+  caption: String
+  displayOrder: Int
+}
+
+type Booking @table {
+  property: Property!
+  creativeProfessional: User!
+  startDate: Timestamp!
+  endDate: Timestamp!
+  totalCost: Float!
+  status: String!
+  messageFromCreative: String
+}
+
+type Review @table {
+  booking: Booking!
+  creativeProfessional: User!
+  property: Property!
+  rating: Int!
+  createdAt: Timestamp!
+  comment: String
+}
