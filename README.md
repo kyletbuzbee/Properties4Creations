@@ -1,49 +1,92 @@
-# Properties 4 Creations Website
+# Properties 4 Creations - Veteran Housing Website
 
 ## Project Purpose
-This project builds a comprehensive website for Properties 4 Creation, a nonprofit organization dedicated to helping veterans with home renovations and improvements. The website serves as a platform to showcase projects, collect leads for seller evaluations and veteran/Section 8 buyer matching, provide resources, and facilitate contractor partner onboarding.
+This project builds a comprehensive website for Properties 4 Creation, a nonprofit organization dedicated to helping veterans with home renovations and improvements. The website serves as a platform to showcase completed projects, collect leads for property evaluations and Section 8 housing matching, provide veteran housing resources, and facilitate community partnerships.
 
-## Stack Summary
-- **Frontend**: Next.js (React) with SSR for SEO, ISR for project pages, Elementor-like page builder components
-- **Hosting**: Firebase Hosting with CDN, rewrites to Cloud Run for dynamic SSR if needed
-- **Data Store / CMS**: Firestore collections for Projects, TeamMembers, Testimonials, Resources, Leads
-- **Functions / APIs**: Firebase Cloud Functions (Node.js/TypeScript) for transactional email sends and data sync
-- **Auth / Portal**: Firebase Authentication with email link sign-in for contractor portal access
-- **Media Management**: Cloud Storage (GCS) with signed URLs, optional Cloudinary integration
-- **Email**: SendGrid for transactional emails (auto-replies, notifications)
-- **Operational Data**: Google Sheets sync for lead management workflows
-- **Analytics**: Google Analytics 4 + Google Tag Manager for event tracking
-- **Scheduling**: Calendly links in email responses
-- **CI/CD**: GitHub Actions for build, test, Lighthouse CI, and Firebase deploy
-- **Monitoring**: Google Cloud Monitoring + Error Reporting, budget alerts
-- **Security**: Firebase Security Rules, reCAPTCHA for forms, rate limiting in functions
+## Technology Stack
+- **Frontend**: Next.js 14 (React 18) with App Router, TypeScript
+- **Styling**: Tailwind CSS with custom PostCSS configuration
+- **Hosting**: Firebase Hosting with CDN
+- **Backend**: Firebase Cloud Functions (Node.js/TypeScript)
+- **Database**: Firestore for projects, leads, and content
+- **Authentication**: Firebase Auth with email link sign-in for contractor portal
+- **Forms**: React Hook Form with reCAPTCHA v3 validation
+- **Email**: SendGrid for transactional emails
+- **Analytics**: Google Analytics 4
+- **Development**: ESLint, Prettier, TypeScript
 
-## Required Environment Variables
-Store securely in GitHub Secrets and Cloud Secret Manager:
+## Quick Start
 
-- `FIREBASE_SERVICE_ACCOUNT_JSON`: Service account key JSON for deployments
-- `GCP_PROJECT_ID_STAGING`: Properties-4-creation-staging project ID
-- `GCP_PROJECT_ID_PROD`: Properties-4-creation-prod project ID
-- `SENDGRID_API_KEY`: API key for SendGrid email sending
-- `SHEETS_SERVICE_ACCOUNT_JSON`: Service account key for Google Sheets access
-- `RECAPTCHA_SITE_KEY`: reCAPTCHA public site key
+### Prerequisites
+- Node.js 22+
+- npm or pnpm
+- Firebase CLI installed globally
+
+### Installation
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   cd web && npm install
+   cd ../functions && npm install
+   ```
+3. Set up environment variables (copy `web/.env.local.example` to `web/.env.local` and fill in real Firebase/reCAPTCHA keys)
+4. Start local development:
+   ```bash
+   cd web && npm run dev
+   ```
+5. In another terminal, start Firebase emulators:
+   ```bash
+   firebase emulators:start
+   ```
+
+## Folder Structure
+- `assets/` - Image and media assets
+- `functions/` - Firebase Cloud Functions (Node.js/TypeScript)
+- `docs/` - Project documentation and schemas
+- `infra/` - Infrastructure setup and configuration
+- `public/` - Static assets for Next.js
+- `scripts/` - Seed scripts and utilities
+- `web/` - Next.js frontend application
+  - `src/app/` - App Router pages
+  - `src/components/` - Reusable React components
+  - `src/lib/` - Firebase configuration and utilities
+- `.vscode/settings.json` - VS Code workspace settings
+
+## Environment Variables
+
+### Web App (web/.env.local)
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+```
+
+### Cloud (GitHub Secrets / Cloud Secret Manager)
+- `FIREBASE_SERVICE_ACCOUNT_JSON`: Service account key for deployments
+- `SENDGRID_API_KEY`: API key for email sending
 - `RECAPTCHA_SECRET_KEY`: reCAPTCHA secret key for server verification
-- `SENTRY_DSN`: Sentry error tracking endpoint (optional)
 
-## Folder Layout
-- `design/`: Design assets and wireframes
-- `docs/`: Documentation, content inventory, and editorial guides
-- `infra/`: Infrastructure scripts for GCP/Firebase setup and service accounts
-- `web/`: Next.js frontend application (App Router)
-  - `public/`: Static assets, robots.txt, sitemap.xml
-  - `src/`: Application source
-    - `app/`: Next.js app router routes and API routes
-    - `components/`: Reusable React components (Header, Hero, ProjectCard, etc.)
-    - `styles/`: CSS stylesheets and utility classes
-    - `utils/`: Shared functions and helpers
-  - `functions/`: Firebase Cloud Functions source (Node.js/TypeScript)
-- `scripts/`: Seed scripts, migration tools, and utilities
-- `tests/`: Test suites, Firebase emulator tests
+## Development Commands
+- `cd web && npm run dev` - Start Next.js dev server
+- `cd functions && npm run build` - Build Cloud Functions
+- `firebase emulators:start` - Start local Firebase emulators
+- `npm run lint` - Run ESLint (functions) or `npm run lint` (web)
+
+## Deployment
+- Staging: Merges to integration branch auto-deploy to staging project
+- Production: Merges to main branch auto-deploy to production
+- Manual deploy: `firebase deploy --only hosting,functions`
+
+## Recent Updates
+- Fixed ESLint errors in Cloud Functions
+- Added VS Code settings to ignore Tailwind @rules warnings
+- Created PostCSS configuration for Tailwind processing
+- Implemented lead form with Firebase Functions backend
+- Added Section 8 housing program integration
 
 ## Contributor Guides
 - **Branching**: Git flow with branches (main, integration, staging, production) plus feature branches as needed

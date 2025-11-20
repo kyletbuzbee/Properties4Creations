@@ -1,0 +1,7 @@
+# Enforce UTF-8 for source files and normalize line endings
+*.css text working-tree-encoding=UTF-8
+*.js text working-tree-encoding=UTF-8
+*.ts text working-tree-encoding=UTF-8
+*.tsx text working-tree-encoding=UTF-8
+*.json text working-tree-encoding=UTF-8
+* text=auto eol=lf

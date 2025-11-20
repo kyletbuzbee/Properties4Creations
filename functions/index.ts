@@ -5,9 +5,37 @@ import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { google } from 'googleapis';
 import * as admin from 'firebase-admin';
+import axios from 'axios';
 
 initializeApp();
 const db = getFirestore();
+
+// ✅ reCAPTCHA Verification
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secretKey) {
+    console.warn('RECAPTCHA_SECRET_KEY not set');
+    return true; // Allow if secret not configured
+  }
+
+  try {
+    const response = await axios.post(
+      'https://www.google.com/recaptcha/api/siteverify',
+      null,
+      {
+        params: {
+          secret: secretKey,
+          response: token
+        }
+      }
+    );
+
+    return response.data.success && response.data.score > 0.5;
+  } catch (error) {
+    console.error('reCAPTCHA verification error:', error);
+    return false;
+  }
+}
 
 // 🔥 Lead Submission Handler
 export const submitLead = onCall({
@@ -15,10 +43,18 @@ export const submitLead = onCall({
   memory: '256MiB',
   timeout: '30s'
 }, async (request) => {
-  const { name, email, type, city, message, veteran_status, section8_status } = request.data;
+  const { name, email, type, city, message, veteran_status, section8_status, recaptchaToken } = request.data;
   
   if (!name || !email || !type || !city) {
     throw new HttpsError('invalid-argument', 'Missing required fields');
+  }
+
+  // Verify reCAPTCHA token
+  if (recaptchaToken) {
+    const isValid = await verifyRecaptcha(recaptchaToken);
+    if (!isValid) {
+      throw new HttpsError('permission-denied', 'reCAPTCHA verification failed');
+    }
   }
 
   try {

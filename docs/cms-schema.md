@@ -26,7 +26,12 @@ This document defines the Firestore collections and document structures for the 
   permits: Array<{permit_type: string, status: string, cost: number}>, // Permit tracking
   lessons_learned: string, // Post-completion insights (wysiwyg)
   veteran_focus: boolean, // True for veteran-targeted projects (required)
-  tags: string[], // Array of tag strings for filtering (e.g., ["Veteran", "Bathroom", "Electrical"])
+  section8_eligible: boolean, // True if property qualifies for Section 8 programs
+  typical_rent_range: string, // e.g., "$800-$1,100" (Section 8 eligible properties)
+  unit_count: number, // Number of rental units in property
+  accessibility_features: string[], // Accessibility features (e.g., ["grab-bars", "no-step-entry"])
+  housing_authority_requirements: string, // Internal notes on local authority requirements (admin only)
+  tags: string[], // Array of tag strings for filtering (e.g., ["Veteran", "Bathroom", "Electrical", "Section 8"])
   created_at: timestamp, // Auto-generated
   updated_at: timestamp, // Auto-updated on edits
 }
@@ -110,6 +115,12 @@ This document defines the Firestore collections and document structures for the 
   status: string, // "pending" | "processing" | "synced" | "error" (auto-managed)
   crm_id: string, // HubSpot contact ID after sync
   crm_status: string, // "created" | "updated" | "error"
+  // Section 8 specific fields (populated based on type and preferences)
+  voucher_status: string, // "none" | "applied" | "approved" | "active" (for Veteran/Donor leads)
+  housing_authority: string, // Housing authority name (optional)
+  household_size: number, // Number of household members (optional)
+  accessibility_needs: string, // Accessibility requirements description (optional)
+  preferred_program: string, // "Section 8" | "Market Rent" | "Both" (optional)
   created_at: timestamp, // Auto-generated
   updated_at: timestamp, // Auto-updated
 }

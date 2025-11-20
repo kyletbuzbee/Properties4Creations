@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { getFunctions, httpsCallable } from 'firebase/functions';
@@ -12,6 +14,12 @@ type FormData = {
   type: 'Seller' | 'Veteran' | 'Donor' | 'Partner';
   city: string;
   message?: string;
+  // Section 8 related fields
+  voucher_status?: 'none' | 'applied' | 'approved' | 'active';
+  housing_authority?: string;
+  household_size?: number;
+  accessibility_needs?: string;
+  preferred_program?: 'Section 8' | 'Market Rent' | 'Both';
 };
 
 // --- Configuration ---
@@ -24,15 +32,17 @@ const LeadForm: React.FC = () => {
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors }, 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
     reset,
-    watch 
+    watch
   } = useForm<FormData>({
     defaultValues: {
-      type: undefined
+      type: undefined,
+      voucher_status: undefined,
+      preferred_program: 'Both'
     }
   });
 
@@ -104,6 +114,10 @@ const LeadForm: React.FC = () => {
     reset();
   };
 
+  // Watch form values for conditional rendering
+  const selectedType = watch('type');
+  const showSection8Fields = selectedType === 'Veteran';
+
   // Show success state
   if (submitStatus === 'success') {
     return (
@@ -130,11 +144,11 @@ const LeadForm: React.FC = () => {
   }
 
   return (
-    <div className="bg-white p-8 rounded-xl shadow-lg max-w-2xl mx-auto border border-slate-200">
+    <div className="bg-white p-8 rounded-xl shadow-lg max-w-2xl mx-auto border border-slate-200" role="main" aria-labelledby="form-title">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-slate-800 mb-2">Get Involved</h2>
+        <h2 id="form-title" className="text-3xl font-bold text-slate-800 mb-2">Get Involved</h2>
         <p className="text-slate-600">
-          Whether you're selling a property or a veteran looking for a home, we're here to help. 
+          Whether you're selling a property or a veteran looking for a home, we're here to help.
           Complete the form below and we'll get back to you within 24 hours.
         </p>
       </div>
@@ -256,6 +270,97 @@ const LeadForm: React.FC = () => {
           />
         </div>
 
+        {/* Section 8 Fields (shown when Veteran is selected) */}
+        {showSection8Fields && (
+          <div className="bg-brand-teal/5 p-6 rounded-lg border border-brand-teal/20">
+            <h3 className="text-lg font-semibold text-brand-navy mb-4">Section 8 Housing Program Details</h3>
+            <p className="text-sm text-slate-600 mb-6">Help us match you with suitable housing options by providing your Section 8 voucher details.</p>
+
+            {/* Voucher Status */}
+            <div className="mb-4">
+              <label htmlFor="voucher_status" className="block text-sm font-semibold text-slate-700 mb-2">
+                Current Voucher Status
+              </label>
+              <select
+                {...register("voucher_status")}
+                className="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors duration-200 px-3 py-2"
+              >
+                <option value="">Select voucher status</option>
+                <option value="none">No voucher</option>
+                <option value="applied">Applied for voucher</option>
+                <option value="approved">Voucher approved</option>
+                <option value="active">Active voucher</option>
+              </select>
+              <p className="text-xs text-slate-500 mt-1">Select your current voucher status to help us match you to eligible units.</p>
+            </div>
+
+            {/* Housing Authority & Household Size */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="housing_authority" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Housing Authority
+                </label>
+                <input
+                  {...register("housing_authority")}
+                  type="text"
+                  className="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors duration-200 px-3 py-2"
+                  placeholder="e.g., Austin Housing Authority"
+                />
+                <p className="text-xs text-slate-500 mt-1">Enter your housing authority name or city/county.</p>
+              </div>
+
+              <div>
+                <label htmlFor="household_size" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Household Size
+                </label>
+                <input
+                  {...register("household_size", {
+                    valueAsNumber: true,
+                    min: { value: 1, message: "Household size must be at least 1" }
+                  })}
+                  type="number"
+                  className="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors duration-200 px-3 py-2"
+                  placeholder="1"
+                  min="1"
+                />
+                {errors.household_size && (
+                  <p className="mt-1 text-sm text-red-600">{errors.household_size.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Accessibility Needs */}
+            <div className="mb-4">
+              <label htmlFor="accessibility_needs" className="block text-sm font-semibold text-slate-700 mb-2">
+                Accessibility Needs
+              </label>
+              <textarea
+                {...register("accessibility_needs")}
+                rows={2}
+                className="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors duration-200 px-3 py-2"
+                placeholder="Describe any mobility or accessibility requirements..."
+              />
+              <p className="text-xs text-slate-500 mt-1">Helps us identify properties that can accommodate your needs.</p>
+            </div>
+
+            {/* Preferred Program */}
+            <div>
+              <label htmlFor="preferred_program" className="block text-sm font-semibold text-slate-700 mb-2">
+                Housing Preference
+              </label>
+              <select
+                {...register("preferred_program")}
+                className="w-full rounded-lg border-slate-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors duration-200 px-3 py-2"
+              >
+                <option value="Section 8">Section 8 only</option>
+                <option value="Market Rent">Market rent only</option>
+                <option value="Both">Either Section 8 or market rent</option>
+              </select>
+              <p className="text-xs text-slate-500 mt-1">We'll prioritize properties based on your preference and voucher status.</p>
+            </div>
+          </div>
+        )}
+
         {/* reCAPTCHA */}
         <div className="flex justify-center">
           {RECAPTCHA_SITE_KEY ? (
@@ -315,4 +420,3 @@ const LeadForm: React.FC = () => {
     </div>
   );
 };
-

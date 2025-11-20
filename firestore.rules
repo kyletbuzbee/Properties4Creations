@@ -2,6 +2,46 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper function for admin access (placeholder - implement auth later)
+    function isAdmin() {
+      return false; // TODO: Implement proper authentication check
+    }
+
+    function isAuthenticated() {
+      return false; // TODO: Implement proper authentication check
+    }
+
+    // Projects collection - public reads except sensitive fields
+    match /projects/{projectId} {
+      allow read: if true; // Public access for project viewing
+      allow write: if isAdmin(); // Admin-only writes
+    }
+
+    // Leads collection - create public for form submissions, read restricted
+    match /leads/{leadId} {
+      allow create: if true; // Allow anonymous form submissions
+      allow read, write: if isAuthenticated() || isAdmin(); // Restrict reads to authenticated users
+    }
+
+    // Testimonials - public read
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Team members - public read
+    match /teamMembers/{memberId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Resources - public read
+    match /resources/{resourceId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Block all other access
     match /{document=**} {
       allow read, write: if false;
     }

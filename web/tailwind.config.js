@@ -1,15 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
+      screens: {
+        'xs': '475px', // Custom breakpoint for very small screens
+      },
       colors: {
         brand: {
-          navy: '#1e3a8a', // Primary: Trust, Professionalism (Tailwind blue-900)
-          red: '#b91c1c',  // Accent: Action, Urgency (Tailwind red-700)
-          olive: '#3f6212', // Secondary: Growth, Veteran connection (Tailwind lime-800)
-          sand: '#f5f5f4',  // Background: Warmth (Tailwind stone-100)
-          slate: '#334155', // Text: Readability (Tailwind slate-700)
+          navy: '#1e293b',  // Deep Navy Authority: Institutional credibility
+          beige: '#ffffff', // Pure white: Clean corporate professionalism
+          cocoa: '#64748b', // Cool gray: Modern corporate stability
+          sage: '#059669',  // Emerald trust: Financial authority & growth
+          tan: '#475569',   // Dark slate: Enhanced hierarchy
+          sand: '#f8fafc',  // Light gray: Subtle backgrounds
+          red: '#dc2626',   // Ruby red: Professional accent
+          olive: '#4d7c0f',  // Professional olive: Secondary accent
         }
       },
       fontFamily: {

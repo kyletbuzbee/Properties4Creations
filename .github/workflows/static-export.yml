@@ -1,0 +1,39 @@
+name: Static Export
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies (web)
+        working-directory: ./web
+        run: npm ci
+
+      - name: Generate export routes from seed
+        working-directory: ./web
+        run: node scripts/generate-export-routes.js
+
+      - name: Run static export (ENHANCE_STATIC=true)
+        working-directory: ./web
+        env:
+          ENHANCE_STATIC: true
+        run: npm run export:static
+
+      - name: Upload exported site
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-export-out
+          path: web/out
