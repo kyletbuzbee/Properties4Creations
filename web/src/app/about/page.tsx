@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import BentoGridStats from '@/components/BentoGridStats';
+import { IconBadge } from '@/components/IconBadge';
 
 export default function AboutPage() {
   return (
@@ -32,6 +33,55 @@ export default function AboutPage() {
               providing them with safe, renovated homes they can call their own. We believe that
               everyone who served our country deserves to live in dignity and comfort.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Core Values Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-brand-navy mb-4">Our Core Values</h2>
+            <p className="text-lg text-slate-600">The principles that guide everything we do</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <IconBadge 
+              icon="partnership" 
+              title="Integrity First" 
+              description="We operate with transparency and ethical practices in all our transactions and relationships"
+            />
+            <IconBadge 
+              icon="quality" 
+              title="Excellence" 
+              description="Every renovation meets rigorous standards ensuring homes are safe, modern, and dignified"
+            />
+            <IconBadge 
+              icon="support" 
+              title="Veteran Focused" 
+              description="Every decision prioritizes the success and wellbeing of the veterans we serve"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+            <IconBadge 
+              icon="community" 
+              title="Community Investment" 
+              description="We strengthen neighborhoods by renovating properties and supporting local development"
+              variant="outline"
+            />
+            <IconBadge 
+              icon="housing" 
+              title="Accessibility" 
+              description="Making quality housing achievable for families who deserve stable, safe homes"
+              variant="outline"
+            />
+            <IconBadge 
+              icon="efficiency" 
+              title="Innovation" 
+              description="We continuously improve our processes to better serve veterans and property owners"
+              variant="outline"
+            />
           </div>
         </div>
       </section>

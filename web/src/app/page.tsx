@@ -1,4 +1,5 @@
 import ModernHero from '@/components/ModernHero';
+import { IconBadge } from '@/components/IconBadge';
 import Link from 'next/link';
 
 export default function Home() {
@@ -6,6 +7,59 @@ export default function Home() {
   return (
     <main className="overflow-hidden">
       <ModernHero />
+
+      {/* Why Choose Us Section with Icons */}
+      <section className="py-20 md:py-32 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-brand-navy mb-4">
+              Why Choose Properties 4 Creation?
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              We're transforming East Texas housing through quality, fairness, and veteran support
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <IconBadge 
+              icon="housing" 
+              title="Affordable Housing" 
+              description="Quality homes designed for veterans and families seeking stable, dignified housing"
+            />
+            <IconBadge 
+              icon="quality" 
+              title="Quality Standards" 
+              description="Every property undergoes rigorous renovation and inspection to meet our standards"
+            />
+            <IconBadge 
+              icon="community" 
+              title="Community Focus" 
+              description="We invest in neighborhoods that support families and veteran success"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <IconBadge 
+              icon="support" 
+              title="Ongoing Support" 
+              description="From property search through move-in, we're here to help you succeed"
+              variant="outline"
+            />
+            <IconBadge 
+              icon="partnership" 
+              title="Fair Partnership" 
+              description="Transparent pricing and ethical practices in all our transactions"
+              variant="outline"
+            />
+            <IconBadge 
+              icon="efficiency" 
+              title="Quick Process" 
+              description="Streamlined Section 8 approvals and move-in support"
+              variant="outline"
+            />
+          </div>
+        </div>
+      </section>
 
       {/* Two-Column Value Proposition Section */}
       <section className="py-20 md:py-32 bg-white">
