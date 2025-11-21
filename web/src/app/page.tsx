@@ -1,5 +1,6 @@
 import ModernHero from '@/components/ModernHero';
 import { IconBadge } from '@/components/IconBadge';
+import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import Link from 'next/link';
 
 export default function Home() {
@@ -94,9 +95,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Testimonial */}
+      {/* Featured Testimonials Carousel */}
       <section className="py-20 md:py-32 bg-brand-navy text-white">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <p className="text-brand-sage text-sm font-semibold tracking-wide mb-2">VETERAN VOICES</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold">
@@ -104,24 +105,8 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* Single featured testimonial */}
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-8 md:p-12">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-sage to-brand-olive flex items-center justify-center flex-shrink-0">
-                <span className="text-lg font-bold">★</span>
-              </div>
-              <div>
-                <p className="font-semibold text-lg">The Garcia Family</p>
-                <p className="text-slate-300 text-sm">Austin, TX • Veteran Family</p>
-              </div>
-            </div>
-            <blockquote className="text-lg leading-relaxed mb-6">
-              "When Sgt. Garcia returned from deployment, we were living in temporary housing. Properties 4 Creations helped us find this beautiful renovated home. Now we're building memories again as a family."
-            </blockquote>
-            <Link href="/insights" className="inline-flex items-center gap-2 text-brand-sage hover:text-brand-sage/80 font-semibold">
-              Read More Stories →
-            </Link>
-          </div>
+          {/* Testimonials Carousel Component */}
+          <TestimonialsCarousel />
         </div>
       </section>
 

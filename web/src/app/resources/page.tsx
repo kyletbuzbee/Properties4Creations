@@ -2,56 +2,51 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { ServiceIcon, ServiceIconType } from '@/components/ServiceIcon';
 
 export default function ResourcesPage() {
   const resourceCategories = [
     {
       title: "Section 8 Info & Eligibility",
       description: "Complete guide with voucher calculator, income estimates, and eligibility requirements for Housing Choice Vouchers",
-      icon: "🏠",
+      iconType: "housing",
       href: "/resources/section8",
-      featured: true,
-      color: "brand-sage"
+      featured: true
     },
     {
       title: "Home Evaluation Guide",
       description: "Learn what to expect from professional property evaluations and renovation planning",
-      icon: "📋",
+      iconType: "documentation",
       href: "/resources/evaluation-guide",
-      featured: false,
-      color: "brand-navy"
+      featured: false
     },
     {
       title: "Veteran Housing Programs",
       description: "Overview of VA loan programs, special veteran housing initiatives, and support services",
-      icon: "🇺🇸",
+      iconType: "support",
       href: "/resources/veteran-programs",
-      featured: false,
-      color: "brand-olive"
+      featured: false
     },
     {
       title: "Property Renovation Timeline",
       description: "Understand typical renovation phases, permits, and project completion expectations",
-      icon: "⏱️",
+      iconType: "efficiency",
       href: "/resources/renovation-timeline",
-      featured: false,
-      color: "brand-navy"
+      featured: false
     },
     {
       title: "Market Value & Cash Offers",
       description: "How we determine fair market value and provide competitive cash offers for properties",
-      icon: "💰",
+      iconType: "affordable",
       href: "/resources/cash-offers",
-      featured: false,
-      color: "brand-red"
+      featured: false
     },
     {
       title: "Success Stories",
       description: "Real stories from veterans who've found housing and sellers who've made a difference",
-      icon: "⭐",
+      iconType: "partnership",
       href: "/resources/success-stories",
-      featured: false,
-      color: "brand-olive"
+      featured: false
     }
   ];
 
@@ -83,8 +78,8 @@ export default function ResourcesPage() {
                 }`}
               >
                 <div className="p-8">
-                  <div className={`w-16 h-16 rounded-full bg-${resource.color}/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    <span className="text-3xl">{resource.icon}</span>
+                  <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <ServiceIcon type={resource.iconType as ServiceIconType} size="lg" />
                   </div>
 
                   <h3 className="text-xl font-bold text-brand-navy mb-3 group-hover:text-brand-red transition-colors">

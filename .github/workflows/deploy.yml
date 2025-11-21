@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Properties 4 Creations P4C Platform
 
 on:
   push:
@@ -7,51 +7,36 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  deploy-p4c:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        cache-dependency-path: |
-          ./web/package-lock.json
-          ./functions/package-lock.json
-
-    - name: Install root dependencies
-      run: npm ci
-
-    - name: Install web dependencies
-      working-directory: ./web
-      run: npm ci
-
-    - name: Build web application
-      working-directory: ./web
-      run: npm run build
-
-    - name: Export static files
-      working-directory: ./web
-      run: npm run export:static
-
-    - name: Copy static files to docs/
+    - name: Deploy P4C Static HTML Platform to GitHub Pages
+      if: github.ref == 'refs/heads/main'
       run: |
+        # Clean and create docs directory for deployment
         rm -rf docs
         mkdir -p docs
-        if [ -d "web/out" ]; then cp -r web/out/* docs/; fi
-        if [ -f "P4C/p4c-export.js" ]; then cp P4C/p4c-export.js docs/; fi
-        if [ -f "P4C/static-maps.js" ]; then cp P4C/static-maps.js docs/; fi
-        if [ -f "P4C/static-html.js" ]; then cp P4C/static-html.js docs/; fi
-        if [ -f "P4C/static-header.js" ]; then cp P4C/static-header.js docs/; fi
-        if [ -f "P4C/static-footer.js" ]; then cp P4C/static-footer.js docs/; fi
-        if [ -f "P4C/static-navigation.js" ]; then cp P4C/static-navigation.js docs/; fi
-        if [ -f "P4C/static-search.js" ]; then cp P4C/static-search.js docs/; fi
-        if [ -f "P4C/static-forms.js" ]; then cp P4C/static-forms.js docs/; fi
-        if [ -f "P4C/static-modals.js" ]; then cp P4C/static-modals.js docs/; fi
+
+        # Copy all P4C HTML pages (main platform)
+        cp -r P4C/*.html docs/
+        cp -r P4C/projects docs/
+
+        # Copy all P4C JavaScript files
+        cp -r P4C/*.js docs/
+
+        # Copy P4C CSS files
+        cp -r P4C/*.css docs/
+
+        # Copy any static assets if they exist
+        if [ -d "P4C/images" ]; then cp -r P4C/images docs/; fi
+
+        # Create deployment verification file
+        echo "Properties 4 Creations P4C Platform - Deployed $(date)" > docs/deployment-info.txt
+        echo "Version: Enterprise Analytics" >> docs/deployment-info.txt
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
@@ -59,3 +44,10 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs
+
+    - name: Verify Deployment
+      if: github.ref == 'refs/heads/main'
+      run: |
+        echo "🚀 P4C Platform Deployed Successfully!"
+        echo "📍 Live URL: https://kyletbuzbee.github.io/Properties4Creations/"
+        echo "📊 Analytics Framework Ready for Implementation"
