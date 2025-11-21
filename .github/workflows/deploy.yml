@@ -31,6 +31,9 @@ jobs:
         # Copy P4C CSS files
         cp -r P4C/*.css docs/
 
+        # Copy CNAME file for custom domain
+        cp -r P4C/CNAME docs/
+
         # Copy any static assets if they exist
         if [ -d "P4C/images" ]; then cp -r P4C/images docs/; fi
 

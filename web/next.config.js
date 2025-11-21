@@ -9,16 +9,21 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Static export for Firebase Hosting
+  output: 'export',
+  trailingSlash: true,
+
   // Compression and performance
   compress: true,
 
-  // Image optimization
+  // Image optimization for static export
   images: {
     domains: ['firebase.appspot.com', 'firebasestorage.googleapis.com', 'cloudinary.com', 'images.unsplash.com'],
     formats: ['image/webp', 'image/avif'],
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    unoptimized: true, // Required for static export
   },
 
   // Security headers

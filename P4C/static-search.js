@@ -17,12 +17,21 @@ P4C.Search = {
         console.log('🔍 Initializing P4C Search...');
 
         try {
+            // Check if DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', this.init.bind(this));
+                return;
+            }
+
             // Load search data
             this.loadSearchData();
 
             // Get DOM elements
             this.searchInput = document.getElementById('search-input');
             this.resultsContainer = document.getElementById('search-results');
+
+            // Initialize empty state
+            this.showEmptyState();
 
             // Bind event handlers
             this.bindEvents();
