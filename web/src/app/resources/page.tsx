@@ -7,11 +7,11 @@ export default function ResourcesPage() {
   const resourceCategories = [
     {
       title: "Section 8 Info & Eligibility",
-      description: "Complete guide for Veterans and applicants using Housing Choice Vouchers (Section 8)",
+      description: "Complete guide with voucher calculator, income estimates, and eligibility requirements for Housing Choice Vouchers",
       icon: "🏠",
       href: "/resources/section8",
       featured: true,
-      color: "brand-teal"
+      color: "brand-sage"
     },
     {
       title: "Home Evaluation Guide",

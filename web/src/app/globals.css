@@ -174,11 +174,11 @@ html {
 
 /* Gradient effects */
 .gradient-cta {
-  background: linear-gradient(135deg, var(--patriot-red), #dc2626);
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
 }
 
 .gradient-hero {
-  background: linear-gradient(135deg, var(--navy-trust), var(--olive-growth), var(--teal-assistance));
+  background: linear-gradient(135deg, #3b82f6, #65a30d, #14b8a6);
 }
 
 /* ======================================================================

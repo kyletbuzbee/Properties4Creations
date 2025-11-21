@@ -1,9 +1,27 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function Section8InfoPage() {
+  const [monthlyIncome, setMonthlyIncome] = useState('3000');
+  const [householdSize, setHouseholdSize] = useState('3');
+  const [calculatedPayment, setCalculatedPayment] = useState<number | null>(null);
+
+  const calculateVoucher = () => {
+    const income = parseFloat(monthlyIncome);
+    const size = parseInt(householdSize);
+
+    if (isNaN(income) || isNaN(size) || income <= 0) {
+      setCalculatedPayment(null);
+      return;
+    }
+
+    // Section 8 typically caps tenant payment at 30% of income
+    const tenantPayment = Math.round(income * 0.3 * 100) / 100;
+    setCalculatedPayment(tenantPayment);
+  };
+
   const eligibilityCriteria = [
     "Family income at or below 50% of area median income",
     "Employment status (active veterans, disabled, or receiving benefits)",
@@ -245,6 +263,143 @@ export default function Section8InfoPage() {
                   </div>
                   <p className="text-slate-700 text-sm mt-4">{region.specialNotes}</p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Voucher Calculator */}
+      <section className="py-16 bg-gradient-to-br from-brand-sage/10 to-brand-olive/10">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-brand-navy mb-4">Section 8 Rent Calculator</h2>
+            <p className="text-xl text-slate-600">
+              Estimate your monthly tenant payment based on household income
+            </p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-card p-8 border border-slate-200">
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <label className="block text-sm font-semibold text-brand-navy mb-3">
+                  Combined Monthly Gross Income ($)
+                </label>
+                <input
+                  type="number"
+                  value={monthlyIncome}
+                  onChange={(e) => setMonthlyIncome(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-sage focus:border-transparent outline-none text-lg"
+                  placeholder="3000"
+                />
+                <p className="text-xs text-slate-500 mt-2">
+                  Include all household members' income before taxes, garnishments, or deductions
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-brand-navy mb-3">
+                  Household Size
+                </label>
+                <select
+                  value={householdSize}
+                  onChange={(e) => setHouseholdSize(e.target.value)}
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-sage focus:border-transparent outline-none text-lg"
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((size) => (
+                    <option key={size} value={size}>
+                      {size} {size === 1 ? 'Person' : 'People'}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-slate-500 mt-2">
+                  Number of people in your household
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={calculateVoucher}
+              className="w-full bg-brand-sage hover:bg-brand-sage/90 text-white font-semibold py-3 rounded-lg transition-colors text-lg mb-8"
+            >
+              Calculate My Estimated Payment
+            </button>
+
+            {calculatedPayment !== null && (
+              <div className="bg-gradient-to-br from-brand-sage/10 to-brand-olive/10 border-2 border-brand-sage rounded-lg p-8">
+                <p className="text-slate-600 text-sm mb-2">Your estimated monthly tenant payment (30% of income):</p>
+                <p className="text-5xl font-bold text-brand-sage mb-6">
+                  ${calculatedPayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </p>
+                <div className="space-y-3 text-sm text-slate-700 bg-white p-6 rounded-lg">
+                  <p>
+                    <strong>What this means:</strong> You would pay approximately this amount toward rent each month with a Section 8 voucher. HUD would pay the landlord the remaining rent amount (up to the area payment standard).
+                  </p>
+                  <p className="text-xs text-slate-500 border-t pt-3">
+                    *This is an estimate based on 30% of income. Actual payment depends on deductions (medical, childcare), family composition, utility responsibilities, and local PHA policies.
+                  </p>
+                  <p className="pt-3 border-t">
+                    <strong>Austin Area Payment Standards:</strong> Vary by bedroom size ($1,200-$2,500+ for 1-4 bedroom units)
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Key Terms */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-brand-navy mb-4">Important Section 8 Voucher Terms</h2>
+            <p className="text-xl text-slate-600">
+              Understanding these key terms will help you navigate the program
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                term: 'Adjusted Gross Income (AGI)',
+                definition: 'Total household income minus allowed deductions like medical expenses over 3% of income, childcare, and disability assistance.'
+              },
+              {
+                term: 'Housing Choice Voucher',
+                definition: 'Certificate issued by PHA that allows you to find and lease any HUD-approved unit at fair market rent within payment standards.'
+              },
+              {
+                term: 'Tenant Payment',
+                definition: 'Amount you pay landlord each month—typically 30% of adjusted gross income (minimum to maximum based on PHA rules).'
+              },
+              {
+                term: 'HUD Subsidy Payment',
+                definition: 'Federal government payment to landlord on your behalf, covering difference between your payment and actual rent.'
+              },
+              {
+                term: 'Payment Standards',
+                definition: 'Maximum rent amount HUD will reimburse in your area. Varies by unit bedroom size and location.'
+              },
+              {
+                term: 'Housing Quality Standards (HQS)',
+                definition: 'Federal safety and livability standards all Section 8 rental units must meet. Inspected annually.'
+              },
+              {
+                term: 'Income Recertification',
+                definition: 'Annual review process where PHA verifies current income and recalculates rent payment accordingly.'
+              },
+              {
+                term: 'Lease-up Period',
+                definition: 'Typically 120 days after receiving voucher to find approved housing. Extensions available in some cases.'
+              },
+              {
+                term: 'Portability',
+                definition: 'Ability to move your voucher to different PHA area after 1 year if you meet requirements and new PHA approves.'
+              }
+            ].map((item, idx) => (
+              <div key={idx} className="bg-slate-50 rounded-lg p-6 border border-slate-200">
+                <h3 className="text-lg font-semibold text-brand-navy mb-2">{item.term}</h3>
+                <p className="text-slate-600 text-sm">{item.definition}</p>
               </div>
             ))}
           </div>
