@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Properties 4 Creations - Veteran Housing & Property Services</title>
-    <meta name="description" content="Professional property management and housing services for veterans. Fair cash offers, Section 8 support, and quality renovations nationwide.">
-    <meta name="keywords" content="property management, veteran housing, Section 8, real estate, property renovation">
+    <title>Properties 4 Creations - Affordable Housing & Section 8 Assistance for Veterans</title>
+    <meta name="description" content="Connecting veterans and families with affordable housing through Section 8 vouchers. Fair rent assistance, property management, and veteran housing support nationwide.">
+    <meta name="keywords" content="Section 8 housing, affordable housing, veteran housing assistance, rent help veterans, Section 8 vouchers, affordable apartments, veteran housing programs">
 
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -40,129 +40,92 @@
     <!-- Leaflet CSS for Maps -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 
-    <style>
-        :root {
-            --duration-fast: 0.2s;
-            --duration-normal: 0.3s;
-            --duration-slow: 0.5s;
-            --duration-slower: 0.8s;
-            --corporate-navy: #1e293b;
-            --corporate-emerald: #059669;
-        }
-
-        body {
-            font-family: 'Merriweather', 'Inter', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            color: #334155;
-            overflow-x: hidden;
-        }
-
-        .animate-fade-in-up { animation: fadeInUp var(--duration-normal) ease-out forwards; }
-        .animate-fade-in-left { animation: fadeInLeft var(--duration-normal) ease-out forwards; }
-        .animate-fade-in-right { animation: fadeInRight var(--duration-normal) ease-out forwards; }
-
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes fadeInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
-    </style>
+    <!-- Enhanced Global Styles with Unified Animations -->
+    <link rel="stylesheet" href="static-enhanced.css">
 </head>
 <body class="bg-brand-beige">
-    <!-- Header -->
-    <header id="main-header" class="fixed top-0 w-full z-50 bg-brand-navy text-white shadow-lg">
+    <!-- Unified Header - Same across all pages -->
+    <header id="main-header" class="sticky top-0 z-50 transition-all duration-300 bg-brand-navy text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
+                <!-- Logo and Brand -->
                 <div class="flex items-center">
-                    <a href="index.html" class="text-xl font-bold text-white hover:text-brand-sage transition-colors">
-                        Properties 4 Creations
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">P4</span>
+                        </div>
+                        <span class="text-xl font-bold group-hover:text-slate-200 transition-colors duration-200 hidden sm:inline">
+                            Properties 4 Creation
+                        </span>
                     </a>
                 </div>
 
                 <!-- Desktop Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-white hover:text-brand-sage transition-colors">Home</a>
-                    <a href="projects.html" class="text-white hover:text-brand-sage transition-colors">Projects</a>
-                    <a href="resources.html" class="text-white hover:text-brand-sage transition-colors">Resources</a>
-                    <a href="insights.html" class="text-white hover:text-brand-sage transition-colors">Insights</a>
-                    <a href="about.html" class="text-white hover:text-brand-sage transition-colors">About</a>
-                    <a href="contact.html" class="text-white hover:text-brand-sage transition-colors">Contact</a>
-                </nav>
+                <nav class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Home</a>
+                    <a href="projects.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Our Work</a>
+                    <a href="insights.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Insights</a>
+                    <a href="resources.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">For Veterans</a>
+                    <a href="about.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">About Us</a>
 
-                <!-- CTA Button -->
-                <div class="flex items-center space-x-4">
-                    <button id="search-toggle" class="hidden md:block px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-colors text-sm">
-                        Search (⌘K)
+                    <!-- Search Button -->
+                    <button id="header-search-toggle" class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-200 hover:text-white hover:bg-white/10 rounded-md transition-all duration-200" title="Search (⌘K)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
                     </button>
-                    <button id="portal-toggle" class="px-4 py-2 bg-brand-sage hover:bg-brand-sage/80 text-white rounded-lg transition-colors">
+
+                    <!-- Portal Button -->
+                    <button id="header-portal-toggle" class="px-3 py-2 text-sm font-medium text-slate-200 hover:text-white hover:bg-white/10 rounded-md transition-all duration-200">
                         Portals
                     </button>
-                    <a href="get-started.html" class="px-4 py-2 bg-brand-red hover:bg-brand-red/80 text-white rounded-lg transition-colors">
-                        Get Started
+
+                    <!-- CTA Button -->
+                    <a href="get-started.html" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-lg font-semibold text-sm hover:shadow-2xl hover:scale-105 transition-all duration-300 hover:shadow-red-500/25">
+                        Get Fair Offer
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-toggle" class="lg:hidden p-2 rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-colors duration-200" aria-expanded="false" aria-label="Toggle navigation menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="lg:hidden overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 invisible -translate-y-2">
+                <div class="px-4 py-6 bg-slate-900/50 border-t border-white/10 backdrop-blur-sm space-y-4">
+                    <a href="index.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Home</a>
+                    <a href="projects.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Our Work</a>
+                    <a href="insights.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Insights</a>
+                    <a href="resources.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">For Veterans</a>
+                    <a href="about.html" class="block px-4 py-3 rounded-lg text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">About Us</a>
+                    
+                    <button id="mobile-search-toggle" class="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Search
+                    </button>
+
+                    <button id="mobile-portal-toggle" class="w-full text-left px-4 py-3 rounded-lg text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">
+                        Portals
+                    </button>
+
+                    <a href="get-started.html" class="block w-full text-center bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-lg mt-4">
+                        Get Fair Offer
                     </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Global Search Modal -->
-    <div id="global-search-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden">
-        <div class="max-w-2xl mx-auto mt-20 bg-white rounded-lg shadow-2xl overflow-hidden">
-            <div class="p-4 border-b border-slate-200">
-                <div class="relative">
-                    <svg class="absolute left-3 top-3 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input id="search-input" type="text" placeholder="Search properties, resources, and pages..." class="w-full pl-10 pr-4 py-3 text-lg border-0 focus:ring-0 focus:outline-none" />
-                    <button id="search-close" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div id="search-results" class="max-h-96 overflow-y-auto">
-                <!-- Results will be populated by JavaScript -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Portal Modal -->
-    <div id="portal-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden">
-        <div class="max-w-md mx-auto mt-20 bg-white rounded-lg shadow-2xl p-6 m-4">
-            <h3 class="text-2xl font-bold text-brand-navy mb-6">Choose Your Portal</h3>
-            <div class="space-y-4">
-                <button id="partner-portal" class="w-full flex items-center gap-3 p-4 bg-brand-sage/10 hover:bg-brand-sage/20 rounded-lg transition-colors">
-                    <div class="w-8 h-8 bg-brand-sage rounded-full flex items-center justify-center">
-                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                    <div class="text-left">
-                        <div class="font-medium text-brand-navy">Partner Portal</div>
-                        <div class="text-sm text-slate-600">Property owners & investors</div>
-                    </div>
-                </button>
-
-                <button id="veteran-portal" class="w-full flex items-center gap-3 p-4 bg-brand-navy/10 hover:bg-brand-navy/20 rounded-lg transition-colors">
-                    <div class="w-8 h-8 bg-brand-navy rounded-full flex items-center justify-center">
-                        <span class="text-xs text-white">🇺🇸</span>
-                    </div>
-                    <div class="text-left">
-                        <div class="font-medium text-brand-navy">Veteran Services</div>
-                        <div class="text-sm text-slate-600">Housing support & resources</div>
-                    </div>
-                </button>
-            </div>
-            <button id="portal-close" class="mt-6 w-full px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:border-slate-400 transition-colors">
-                Close
-            </button>
-        </div>
-    </div>
-
     <!-- Main Content -->
-    <main class="pt-16">
+    <main>
         <!-- Hero Section -->
-        <section class="bg-gradient-to-br from-brand-navy to-brand-cocoa text-white py-20">
+        <section class="bg-gradient-to-br from-brand-navy to-brand-tan text-white py-20 md:py-32">
             <div class="max-w-6xl mx-auto px-4 text-center">
                 <div class="animate-fade-in-up">
                     <h1 class="text-4xl md:text-6xl font-heading font-bold mb-6 leading-tight">
@@ -178,7 +141,7 @@
                         <a href="get-started.html" class="px-8 py-4 bg-brand-sage hover:bg-brand-sage/90 text-white rounded-lg font-semibold transition-all hover:shadow-xl">
                             Get Fair Cash Offer →
                         </a>
-                        <a href="resources/voucher-calculator.html" class="px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-brand-navy rounded-lg font-semibold transition-all">
+                        <a href="resources.html" class="px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-brand-navy rounded-lg font-semibold transition-all">
                             Calculate Savings
                         </a>
                     </div>
@@ -242,52 +205,148 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-brand-navy text-white py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="font-bold text-lg mb-4">Properties 4 Creations</h3>
-                    <p class="text-slate-300 text-sm">
-                        Connecting veterans with quality homes through fair market practices and exceptional renovations.
+    <!-- Unified Footer - Same across all pages -->
+    <footer class="bg-slate-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <!-- Brand Column (2 cols on large) -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">P4</span>
+                        </div>
+                        <h3 class="text-2xl font-bold">Properties 4 Creations</h3>
+                    </div>
+                    <p class="text-slate-300 mb-6">
+                        Expert renovations and fair housing solutions for veterans. Transparent pricing, quality workmanship, nationwide service.
                     </p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Services</h4>
-                    <ul class="space-y-2 text-sm text-slate-300">
-                        <li><a href="properties.html" class="hover:text-brand-sage transition-colors">Property Sales</a></li>
-                        <li><a href="renovations.html" class="hover:text-brand-sage transition-colors">Renovations</a></li>
-                        <li><a href="management.html" class="hover:text-brand-sage transition-colors">Management</a></li>
-                        <li><a href="consulting.html" class="hover:text-brand-sage transition-colors">Consulting</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Resources</h4>
-                    <ul class="space-y-2 text-sm text-slate-300">
-                        <li><a href="resources/section8.html" class="hover:text-brand-sage transition-colors">Section 8 Guide</a></li>
-                        <li><a href="resources/voucher-calculator.html" class="hover:text-brand-sage transition-colors">Cost Calculator</a></li>
-                        <li><a href="insights.html" class="hover:text-brand-sage transition-colors">Market Insights</a></li>
-                        <li><a href="faq.html" class="hover:text-brand-sage transition-colors">FAQ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4">Contact</h4>
-                    <div class="space-y-2 text-sm text-slate-300">
-                        <p>📞 (512) 555-PROPERTY</p>
-                        <p>💼 support@properties4creation.com</p>
-                        <div class="flex space-x-4 mt-4">
-                            <a href="#" class="hover:text-brand-sage transition-colors">Facebook</a>
-                            <a href="#" class="hover:text-brand-sage transition-colors">LinkedIn</a>
-                            <a href="#" class="hover:text-brand-sage transition-colors">Twitter</a>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-slate-300">
+                            <span class="mr-3">📧</span>
+                            <a href="mailto:contact@properties4creations.com" class="hover:text-white transition-colors">contact@properties4creations.com</a>
+                        </div>
+                        <div class="flex items-center text-slate-300">
+                            <span class="mr-3">📞</span>
+                            <a href="tel:+15125550123" class="hover:text-white transition-colors">(512) 555-0123</a>
+                        </div>
+                        <div class="flex items-center text-slate-300">
+                            <span class="mr-3">📍</span>
+                            <span>Austin, Texas & Surrounding Areas</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Services Column -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-red-400">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="projects.html" class="text-slate-300 hover:text-white transition-colors">Home Renovations</a></li>
+                        <li><a href="resources.html" class="text-slate-300 hover:text-white transition-colors">Veteran Housing</a></li>
+                        <li><a href="get-started.html" class="text-slate-300 hover:text-white transition-colors">Cash Offers</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company Column -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-red-400">Company</h4>
+                    <ul class="space-y-3">
+                        <li><a href="about.html" class="text-slate-300 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="text-slate-300 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="insights.html" class="text-slate-300 hover:text-white transition-colors">Insights</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources Column -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-red-400">Resources</h4>
+                    <ul class="space-y-3">
+                        <li><a href="resources.html" class="text-slate-300 hover:text-white transition-colors">For Veterans</a></li>
+                        <li><a href="contact.html" class="text-slate-300 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="about.html" class="text-slate-300 hover:text-white transition-colors">Success Stories</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="border-t border-slate-700 mt-8 pt-8 text-center text-sm text-slate-400">
-                <p>&copy; 2025 Properties 4 Creations. All rights reserved. | <a href="privacy.html" class="hover:text-brand-sage transition-colors">Privacy Policy</a> | <a href="terms.html" class="hover:text-brand-sage transition-colors">Terms of Service</a></p>
+
+            <!-- Legal & Accessibility Row -->
+            <div class="border-t border-slate-700 mt-12 pt-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-6 text-center text-sm">
+                    <a href="privacy.html" class="text-slate-400 hover:text-teal-300 transition-colors flex flex-col items-center">
+                        <span class="text-2xl mb-1">🛡️</span>
+                        Privacy Policy
+                    </a>
+                    <a href="terms.html" class="text-slate-400 hover:text-teal-300 transition-colors flex flex-col items-center">
+                        <span class="text-2xl mb-1">📋</span>
+                        Terms of Service
+                    </a>
+                    <a href="accessibility.html" class="text-slate-400 hover:text-teal-300 transition-colors flex flex-col items-center">
+                        <span class="text-2xl mb-1">♿</span>
+                        Accessibility
+                    </a>
+                    <button id="footer-accessibility-toggle" class="text-slate-400 hover:text-teal-300 transition-colors flex flex-col items-center cursor-pointer">
+                        <span class="text-2xl mb-1">🎨</span>
+                        Settings
+                    </button>
+                </div>
+
+                <!-- Copyright & Tagline -->
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p id="footer-copyright">&copy; <span id="current-year"></span> Properties 4 Creation. All rights reserved.</p>
+                    <div class="flex items-center space-x-2 mt-4 md:mt-0">
+                        <span class="text-slate-400">Made with</span>
+                        <span class="text-red-500">❤️</span>
+                        <span class="text-slate-400">for veterans</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accessibility Widget Modal -->
+        <div id="accessibility-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+        <div id="accessibility-widget" class="fixed bottom-4 right-4 bg-white p-6 rounded-lg shadow-2xl border border-gray-200 z-50 min-w-80 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-800 text-lg">Accessibility Settings</h3>
+                <button id="accessibility-close" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Text Size</label>
+                    <select id="text-size-select" class="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="normal">Normal</option>
+                        <option value="large">Large</option>
+                        <option value="extra-large">Extra Large</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Contrast</label>
+                    <select id="contrast-select" class="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="normal">Normal</option>
+                        <option value="high">High Contrast</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Motion</label>
+                    <select id="motion-select" class="w-full p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="normal">Normal</option>
+                        <option value="reduced">Reduced Motion</option>
+                    </select>
+                </div>
+
+                <button id="accessibility-apply" class="w-full bg-red-500 text-white py-2 rounded text-sm font-medium hover:bg-red-600 transition-colors">
+                    Apply Settings
+                </button>
             </div>
         </div>
     </footer>
+
+    <!-- Unified Header Navigation Handler -->
+    <script src="static-header.js"></script>
 
     <!-- Interactive JavaScript Libraries -->
     <script src="static-html.js"></script>
@@ -298,11 +357,86 @@
     <script src="static-forms.js"></script>
     <script src="static-modals.js"></script>
 
+    <!-- Footer Accessibility Widget Script -->
+    <script>
+        // Update footer copyright year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Accessibility Widget Toggle
+        const accessibilityToggle = document.getElementById('footer-accessibility-toggle');
+        const accessibilityWidget = document.getElementById('accessibility-widget');
+        const accessibilityOverlay = document.getElementById('accessibility-overlay');
+        const accessibilityClose = document.getElementById('accessibility-close');
+        const accessibilityApply = document.getElementById('accessibility-apply');
+
+        if (accessibilityToggle) {
+            accessibilityToggle.addEventListener('click', () => {
+                accessibilityWidget.classList.toggle('hidden');
+                accessibilityOverlay.classList.toggle('hidden');
+            });
+        }
+
+        if (accessibilityClose) {
+            accessibilityClose.addEventListener('click', () => {
+                accessibilityWidget.classList.add('hidden');
+                accessibilityOverlay.classList.add('hidden');
+            });
+        }
+
+        if (accessibilityOverlay) {
+            accessibilityOverlay.addEventListener('click', () => {
+                accessibilityWidget.classList.add('hidden');
+                accessibilityOverlay.classList.add('hidden');
+            });
+        }
+
+        if (accessibilityApply) {
+            accessibilityApply.addEventListener('click', () => {
+                const textSize = document.getElementById('text-size-select').value;
+                const contrast = document.getElementById('contrast-select').value;
+                const motion = document.getElementById('motion-select').value;
+
+                // Apply text size
+                document.documentElement.style.fontSize = 
+                    textSize === 'large' ? '18px' : 
+                    textSize === 'extra-large' ? '20px' : 
+                    '16px';
+
+                // Apply contrast
+                if (contrast === 'high') {
+                    document.documentElement.classList.add('high-contrast');
+                } else {
+                    document.documentElement.classList.remove('high-contrast');
+                }
+
+                // Apply motion preferences
+                if (motion === 'reduced') {
+                    document.documentElement.classList.add('reduce-motion');
+                } else {
+                    document.documentElement.classList.remove('reduce-motion');
+                }
+
+                accessibilityWidget.classList.add('hidden');
+                accessibilityOverlay.classList.add('hidden');
+            });
+        }
+
+        // Add CSS for accessibility classes
+        const style = document.createElement('style');
+        style.textContent = `
+            .high-contrast { filter: contrast(1.5); }
+            .reduce-motion * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        `;
+        document.head.appendChild(style);
+    </script>
+
     <!-- Initialize everything -->
     <script>
         // Initialize all static features after DOM load
         document.addEventListener('DOMContentLoaded', function() {
-            P4C.init();
+            if (window.P4C && window.P4C.init) {
+                P4C.init();
+            }
         });
 
         // Global error handler

@@ -47,31 +47,56 @@
 </head>
 <body class="bg-brand-beige">
     <!-- Header -->
-    <header id="main-header" class="fixed top-0 w-full z-50 bg-brand-navy text-white shadow-lg">
+    <header id="main-header" class="sticky top-0 z-50 transition-all duration-300 bg-brand-navy text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex items-center justify-between h-16">
+                <!-- Logo and Brand -->
                 <div class="flex items-center">
-                    <a href="index.html" class="text-xl font-bold text-white hover:text-brand-sage transition-colors">
-                        Properties 4 Creations
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                            <span class="text-white font-bold text-lg">P4</span>
+                        </div>
+                        <span class="text-xl font-bold group-hover:text-slate-200 transition-colors duration-200 hidden sm:inline">
+                            Properties 4 Creation
+                        </span>
                     </a>
                 </div>
 
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-white hover:text-brand-sage transition-colors">Home</a>
-                    <a href="projects.html" class="text-white hover:text-brand-sage transition-colors font-semibold">Projects</a>
-                    <a href="resources.html" class="text-white hover:text-brand-sage transition-colors">Resources</a>
-                    <a href="insights.html" class="text-white hover:text-brand-sage transition-colors">Insights</a>
-                    <a href="about.html" class="text-white hover:text-brand-sage transition-colors">About</a>
-                    <a href="contact.html" class="text-white hover:text-brand-sage transition-colors">Contact</a>
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="index.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Home</a>
+                    <a href="projects.html" class="px-3 py-2 text-sm font-medium rounded-md bg-white/20 text-white transition-all duration-200">Our Work</a>
+                    <a href="insights.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">Insights</a>
+                    <a href="resources.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">For Veterans</a>
+                    <a href="about.html" class="px-3 py-2 text-sm font-medium rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-all duration-200">About Us</a>
                 </nav>
 
+                <!-- Right side - CTA and Mobile Menu Button -->
                 <div class="flex items-center space-x-4">
-                    <button id="search-toggle" class="hidden md:block px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-colors text-sm">
-                        Search (⌘K)
+                    <a href="get-started.html" class="hidden lg:inline-block bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300">
+                        Get Started
+                    </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-toggle" class="lg:hidden p-2 rounded-md text-slate-200 hover:text-white hover:bg-white/10 transition-colors" aria-expanded="false" aria-label="Toggle navigation menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
                     </button>
-                    <button id="portal-toggle" class="px-4 py-2 bg-brand-sage hover:bg-brand-sage/80 text-white rounded-lg transition-colors">
-                        Portals
-                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="lg:hidden hidden border-t border-white/10 bg-brand-navy/95 backdrop-blur-sm">
+                <div class="px-4 py-4 space-y-2">
+                    <a href="index.html" class="block px-4 py-3 rounded-md text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all">Home</a>
+                    <a href="projects.html" class="block px-4 py-3 rounded-md text-base font-medium bg-white/20 text-white transition-all">Our Work</a>
+                    <a href="insights.html" class="block px-4 py-3 rounded-md text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all">Insights</a>
+                    <a href="resources.html" class="block px-4 py-3 rounded-md text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all">For Veterans</a>
+                    <a href="about.html" class="block px-4 py-3 rounded-md text-base font-medium text-slate-200 hover:text-white hover:bg-white/10 transition-all">About Us</a>
+                    <a href="get-started.html" class="block w-full text-center bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-3 rounded-md font-semibold text-sm hover:shadow-lg hover:shadow-red-500/30 transition-all mt-4">
+                        Get Started
+                    </a>
                 </div>
             </div>
         </div>
