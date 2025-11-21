@@ -2,9 +2,9 @@ name: Deploy Properties 4 Creations P4C Platform
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, p4c-static-site ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, p4c-static-site ]
 
 jobs:
   deploy-p4c:
@@ -14,7 +14,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Deploy P4C Static HTML Platform to GitHub Pages
+    - name: Deploy P4C Static HTML Platform from Main Branch to docs
       if: github.ref == 'refs/heads/main'
       run: |
         # Clean and create docs directory for deployment
@@ -41,16 +41,29 @@ jobs:
         echo "Properties 4 Creations P4C Platform - Deployed $(date)" > docs/deployment-info.txt
         echo "Version: Enterprise Analytics" >> docs/deployment-info.txt
 
-    - name: Deploy to GitHub Pages
+    - name: Deploy Main Branch to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs
 
-    - name: Verify Deployment
-      if: github.ref == 'refs/heads/main'
+    - name: Deploy P4C Static Site from Dedicated Branch
+      if: github.ref == 'refs/heads/p4c-static-site'
       run: |
-        echo "🚀 P4C Platform Deployed Successfully!"
-        echo "📍 Live URL: https://kyletbuzbee.github.io/Properties4Creations/"
-        echo "📊 Analytics Framework Ready for Implementation"
+        # Deploy P4C files directly from branch root (no docs folder copying needed)
+        echo "Deploying P4C static site from p4c-static-site branch"
+        echo "All P4C files in root will be served directly by GitHub Pages"
+        echo "Branch deployment will serve files from root automatically"
+
+    - name: Verify Deployment
+      run: |
+        if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          echo "🚀 Main Branch - P4C Platform Deployed Successfully!"
+          echo "📍 Live URL: https://kyletbuzbee.github.io/Properties4Creations/"
+          echo "📊 Analytics Framework Ready for Implementation"
+        elif [[ "${{ github.ref }}" == "refs/heads/p4c-static-site" ]]; then
+          echo "🎯 P4C Static Branch - Ready for Deployment!"
+          echo "📍 Will Deploy: https://kyletbuzbee.github.io/Properties4Creations/"
+          echo "⚙️ Configure in GitHub Pages Settings: Branch=p4c-static-site, Folder=/"
+        fi
