@@ -1,5 +1,6 @@
 import React from 'react';
 import MultiStepLeadForm from '@/components/MultiStepLeadForm';
+import { ServiceIcon } from '@/components/ServiceIcon';
 
 export default function ContactPage() {
   return (
@@ -28,7 +29,7 @@ export default function ContactPage() {
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">📧</span>
+                    <ServiceIcon type="email" size="md" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-brand-navy mb-1">Email</h3>
@@ -40,7 +41,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">📞</span>
+                    <ServiceIcon type="phone" size="md" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-brand-navy mb-1">Phone</h3>
@@ -52,7 +53,7 @@ export default function ContactPage() {
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl">📍</span>
+                    <ServiceIcon type="location" size="md" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-brand-navy mb-1">Location</h3>
