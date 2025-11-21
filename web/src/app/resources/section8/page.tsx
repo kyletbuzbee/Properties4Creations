@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { ServiceIcon, ServiceIconType } from '@/components/ServiceIcon';
 
 export default function Section8InfoPage() {
   const [monthlyIncome, setMonthlyIncome] = useState('3000');
@@ -23,12 +24,12 @@ export default function Section8InfoPage() {
   };
 
   const eligibilityCriteria = [
-    "Family income at or below 50% of area median income",
-    "Employment status (active veterans, disabled, or receiving benefits)",
-    "Veteran status and service records",
-    "Local housing authority waiting list availability",
-    "Household composition and size",
-    "Criminal background check (varies by jurisdiction)"
+    { text: "Family income at or below 50% of area median income", icon: "affordable" as ServiceIconType },
+    { text: "Employment status (active veterans, disabled, or receiving benefits)", icon: "support" as ServiceIconType },
+    { text: "Veteran status and service records", icon: "partnership" as ServiceIconType },
+    { text: "Local housing authority waiting list availability", icon: "housing" as ServiceIconType },
+    { text: "Household composition and size", icon: "community" as ServiceIconType },
+    { text: "Criminal background check (varies by jurisdiction)", icon: "documentation" as ServiceIconType }
   ];
 
   const applicationSteps = [
@@ -177,7 +178,12 @@ export default function Section8InfoPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {eligibilityCriteria.map((criteria, index) => (
               <div key={index} className="bg-gray-50 p-6 rounded-lg border-l-4 border-brand-teal">
-                <p className="text-slate-700">{criteria}</p>
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0">
+                    <ServiceIcon type={criteria.icon} size="md" />
+                  </div>
+                  <p className="text-slate-700">{criteria.text}</p>
+                </div>
               </div>
             ))}
           </div>
