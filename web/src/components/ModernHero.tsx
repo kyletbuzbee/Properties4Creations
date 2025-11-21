@@ -1,12 +1,30 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ModernHero() {
+  const useBackgroundImages = true; // Set to false if you prefer color-only while downloading
+  
   return (
     <section className="relative min-h-[90vh] flex flex-col lg:flex-row">
       {/* LEFT: Seller/Donor Focus (Navy Theme) */}
       <div className="flex-1 bg-brand-navy flex items-center justify-center p-8 md:p-16 lg:p-20 relative overflow-hidden group">
-        <div className="absolute inset-0 bg-[url('/assets/patio_wood.jpg')] opacity-10 bg-cover bg-center mix-blend-overlay transition-transform duration-700 group-hover:scale-105"/>
+        {/* Background texture overlay - using existing patio_wood.jpg */}
+        {useBackgroundImages && (
+          <div className="absolute inset-0 opacity-15 mix-blend-overlay transition-transform duration-700 group-hover:scale-105">
+            <Image
+              src="/images/patio_wood.jpg"
+              alt=""
+              fill
+              className="object-cover"
+              quality={60}
+            />
+          </div>
+        )}
+        {/* Fallback pattern for when images aren't available */}
+        {!useBackgroundImages && (
+          <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 to-red-900/10 opacity-20" />
+        )}
         <div className="relative z-10 max-w-md animate-fade-in-left">
           <span className="inline-block py-1 px-3 rounded-full bg-red-600/20 text-red-200 border border-red-500/30 text-xs font-bold tracking-wider mb-4">
             FOR PROPERTY OWNERS
