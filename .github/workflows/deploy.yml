@@ -2,9 +2,9 @@ name: Deploy Properties 4 Creations P4C Platform
 
 on:
   push:
-    branches: [ main, p4c-static-site ]
+    branches: [ main, p4c ]
   pull_request:
-    branches: [ main, p4c-static-site ]
+    branches: [ main, p4c ]
 
 jobs:
   deploy-p4c:
@@ -48,13 +48,69 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./docs
 
-    - name: Deploy P4C Static Site from Dedicated Branch
-      if: github.ref == 'refs/heads/p4c-static-site'
+    - name: Build P4C Deployment Package
+      if: github.ref == 'refs/heads/p4c'
       run: |
-        # Deploy P4C files directly from branch root (no docs folder copying needed)
-        echo "Deploying P4C static site from p4c-static-site branch"
-        echo "All P4C files in root will be served directly by GitHub Pages"
-        echo "Branch deployment will serve files from root automatically"
+        # Verify P4C directory exists and has content
+        if [ ! -d "P4C" ]; then
+          echo "❌ Error: P4C directory not found!"
+          exit 1
+        fi
+
+        # Check if P4C has HTML files
+        if ! ls P4C/*.html 1> /dev/null 2>&1; then
+          echo "❌ Error: No HTML files found in P4C directory!"
+          exit 1
+        fi
+
+        # Clean and create deployment directory
+        rm -rf p4c-deploy
+        mkdir -p p4c-deploy
+
+        # Selectively copy ONLY the files needed for static site deployment
+        echo "📦 Building deployment package with selective files..."
+
+        # Copy HTML pages (main and project pages)
+        if ls P4C/*.html 1> /dev/null 2>&1; then
+          echo "✅ Copying $(ls P4C/*.html | wc -l) HTML pages"
+          cp P4C/*.html p4c-deploy/
+        fi
+
+        # Copy JavaScript files
+        if ls P4C/*.js 1> /dev/null 2>&1; then
+          echo "✅ Copying $(ls P4C/*.js | wc -l) JavaScript files"
+          cp P4C/*.js p4c-deploy/
+        fi
+
+        # Copy CSS files
+        if ls P4C/*.css 1> /dev/null 2>&1; then
+          echo "✅ Copying $(ls P4C/*.css | wc -l) CSS files"
+          cp P4C/*.css p4c-deploy/
+        fi
+
+        # Copy CNAME for custom domain
+        if [ -f "P4C/CNAME" ]; then
+          echo "✅ Copying CNAME file"
+          cp P4C/CNAME p4c-deploy/
+        fi
+
+        # Copy any images in P4C directory
+        if [ -d "P4C/images" ]; then
+          echo "✅ Copying images directory"
+          cp -r P4C/images p4c-deploy/
+        fi
+
+        # Report what was included
+        echo "📋 Deployment package contents:"
+        ls -la p4c-deploy/
+        echo "📊 Total files: $(find p4c-deploy -type f | wc -l)"
+
+    - name: Deploy P4C Static Site to GitHub Pages
+      if: github.ref == 'refs/heads/p4c'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./p4c-deploy
 
     - name: Verify Deployment
       run: |
@@ -62,8 +118,8 @@ jobs:
           echo "🚀 Main Branch - P4C Platform Deployed Successfully!"
           echo "📍 Live URL: https://kyletbuzbee.github.io/Properties4Creations/"
           echo "📊 Analytics Framework Ready for Implementation"
-        elif [[ "${{ github.ref }}" == "refs/heads/p4c-static-site" ]]; then
-          echo "🎯 P4C Static Branch - Ready for Deployment!"
-          echo "📍 Will Deploy: https://kyletbuzbee.github.io/Properties4Creations/"
-          echo "⚙️ Configure in GitHub Pages Settings: Branch=p4c-static-site, Folder=/"
+        elif [[ "${{ github.ref }}" == "refs/heads/p4c" ]]; then
+          echo "🎯 P4C Static Site Deployed Successfully!"
+          echo "📍 Live URL: https://kyletbuzbee.github.io/Properties4Creations/"
+          echo "🔄 Deployment handled automatically via GitHub Actions workflow"
         fi
