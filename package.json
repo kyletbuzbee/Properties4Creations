@@ -1,6 +1,27 @@
 {
+  "name": "properties-4-creation",
+  "version": "1.0.0",
+  "description": "Affordable housing platform for veterans and families",
+  "private": true,
+  "workspaces": [
+    "web",
+    "functions"
+  ],
+  "scripts": {
+    "setup": "npm install && npm --workspace=web install && npm --workspace=functions install",
+    "dev": "npm --workspace=web run dev",
+    "build": "npm --workspace=web run build",
+    "start": "npm --workspace=web start",
+    "export": "npm --workspace=web run export:static",
+    "test": "npm --workspace=web run test",
+    "lint": "npm --workspace=web run lint",
+    "audit": "npm audit --production"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "dependencies": {
-    "firebase": "^12.6.0",
-    "tailwind": "^4.0.0"
+    "firebase": "^12.6.0"
   }
 }
