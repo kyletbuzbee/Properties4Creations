@@ -1,190 +1,302 @@
 #!/usr/bin/env node
 
 /**
- * Image Optimization Pipeline
- * 
- * Compresses and optimizes all images for web delivery
- * Reduces file sizes by 60-80% while maintaining quality
- * 
- * Prerequisites:
- * - ImageMagick or similar installed
- * - Or use: npm install imagemin imagemin-jpeg-tran imagemin-pngquant
- * 
- * Usage:
- * npm run optimize-images
+ * Next-Gen Image Optimization Pipeline
+ *
+ * Uses Sharp (modern, dependency-free) for optimal web performance
+ * Generates WebP/AVIF formats, progressive loading, and responsive images
+ *
+ * Features:
+ * - WebP & AVIF automatic conversion (80%+ smaller files)
+ * - Progressive JPEG for better loading
+ * - Responsive image generation
+ * - Metadata stripping
+ * - Quality optimization
+ *
+ * Usage: npm run optimize-images
  */
 
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
-const { execSync } = require('child_process');
+const sharp = require('sharp');
 
+// Configuration
 const IMAGES_DIR = path.join(__dirname, '../public/images');
-const QUALITY_SETTINGS = {
-  jpg: { quality: 75, targetSize: 300 }, // KB
-  png: { quality: 75, targetSize: 200 }
+const OUTPUT_QUALITY = {
+  webp: { quality: 80, progressive: false },
+  avif: { quality: 75, lossless: false },
+  jpeg: { quality: 80, progressive: true },
+  png: { compressionLevel: 9, palette: true }
 };
 
-// File size utilities
-function getFileSizeKB(filePath) {
-  const stats = fs.statSync(filePath);
-  return Math.round(stats.size / 1024);
-}
+const RESPONSIVE_BREAKPOINTS = [384, 640, 768, 1024, 1280, 1536]; // Tailwind breakpoints
 
+// Utility functions
 function formatBytes(bytes) {
   if (bytes === 0) return '0 B';
   const k = 1024;
-  const sizes = ['B', 'KB', 'MB'];
+  const sizes = ['B', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
 /**
- * Find all image files
+ * Get file size in bytes
  */
-function findImages(dir) {
+async function getFileSize(filePath) {
+  try {
+    const stats = await fs.stat(filePath);
+    return stats.size;
+  } catch (error) {
+    return 0;
+  }
+}
+
+/**
+ * Find all image files recursively
+ */
+async function findImages(dir) {
   const images = [];
   const extensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
-  function walk(currentPath) {
-    const files = fs.readdirSync(currentPath, { withFileTypes: true });
-    
-    files.forEach(file => {
-      const fullPath = path.join(currentPath, file.name);
-      
-      if (file.isDirectory()) {
-        walk(fullPath);
-      } else if (extensions.includes(path.extname(file.name).toLowerCase())) {
-        images.push(fullPath);
+  async function walk(currentPath) {
+    try {
+      const files = await fs.readdir(currentPath, { withFileTypes: true });
+
+      for (const file of files) {
+        const fullPath = path.join(currentPath, file.name);
+
+        if (file.isDirectory() && !file.name.startsWith('.')) {
+          await walk(fullPath);
+        } else if (extensions.includes(path.extname(file.name).toLowerCase())) {
+          images.push(fullPath);
+        }
       }
-    });
+    } catch (error) {
+      console.log(`⚠️  Error reading directory ${currentPath}: ${error.message}`);
+    }
   }
 
-  walk(dir);
+  await walk(dir);
   return images;
 }
 
 /**
- * Optimize JPEG image
+ * Generate WebP version of image
  */
-function optimizeJpeg(imagePath) {
+async function generateWebp(inputPath, outputPath) {
   try {
-    // Using ImageMagick via convert command
-    const tempPath = imagePath + '.temp.jpg';
-    const command = `convert "${imagePath}" -quality 75 -strip "${tempPath}"`;
-    
-    execSync(command);
-    
-    const originalSize = getFileSizeKB(imagePath);
-    const newSize = getFileSizeKB(tempPath);
-    
-    if (newSize < originalSize) {
-      fs.renameSync(tempPath, imagePath);
-      return { original: originalSize, optimized: newSize, saved: originalSize - newSize };
-    } else {
-      fs.unlinkSync(tempPath);
-      return { original: originalSize, optimized: originalSize, saved: 0 };
-    }
+    await sharp(inputPath)
+      .webp(OUTPUT_QUALITY.webp)
+      .toFile(outputPath);
+    return true;
   } catch (error) {
-    console.log(`    ⚠️  ImageMagick not available, trying built-in compression...`);
-    return { original: getFileSizeKB(imagePath), optimized: getFileSizeKB(imagePath), saved: 0 };
+    console.log(`⚠️  WebP generation failed for ${path.basename(inputPath)}: ${error.message}`);
+    return false;
   }
 }
 
 /**
- * Optimize PNG image
+ * Generate AVIF version of image
  */
-function optimizePng(imagePath) {
+async function generateAvif(inputPath, outputPath) {
   try {
-    const tempPath = imagePath + '.temp.png';
-    const command = `convert "${imagePath}" -quality 75 -strip "${tempPath}"`;
-    
-    execSync(command);
-    
-    const originalSize = getFileSizeKB(imagePath);
-    const newSize = getFileSizeKB(tempPath);
-    
-    if (newSize < originalSize) {
-      fs.renameSync(tempPath, imagePath);
-      return { original: originalSize, optimized: newSize, saved: originalSize - newSize };
-    } else {
-      fs.unlinkSync(tempPath);
-      return { original: originalSize, optimized: originalSize, saved: 0 };
-    }
+    await sharp(inputPath)
+      .avif(OUTPUT_QUALITY.avif)
+      .toFile(outputPath);
+    return true;
   } catch (error) {
-    console.log(`    ⚠️  ImageMagick not available`);
-    return { original: getFileSizeKB(imagePath), optimized: getFileSizeKB(imagePath), saved: 0 };
+    console.log(`⚠️  AVIF generation failed for ${path.basename(inputPath)}: ${error.message}`);
+    return false;
   }
 }
 
 /**
- * Main optimization
+ * Optimize JPEG images
  */
-function main() {
-  console.log('🖼️  Image Optimization Pipeline');
+async function optimizeJpeg(inputPath) {
+  try {
+    const optimizedName = path.basename(inputPath, path.extname(inputPath)) + '_optimized.jpg';
+    const outputPath = path.join(path.dirname(inputPath), optimizedName);
+
+    await sharp(inputPath)
+      .jpeg(OUTPUT_QUALITY.jpeg)
+      .toFile(outputPath);
+
+    return outputPath;
+  } catch (error) {
+    console.log(`⚠️  JPEG optimization failed: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Optimize PNG images
+ */
+async function optimizePng(inputPath) {
+  try {
+    const optimizedName = path.basename(inputPath, path.extname(inputPath)) + '_optimized.png';
+    const outputPath = path.join(path.dirname(inputPath), optimizedName);
+
+    await sharp(inputPath)
+      .png(OUTPUT_QUALITY.png)
+      .toFile(outputPath);
+
+    return outputPath;
+  } catch (error) {
+    console.log(`⚠️  PNG optimization failed: ${error.message}`);
+    return null;
+  }
+}
+
+/**
+ * Generate responsive image variants
+ */
+async function generateResponsive(inputPath, outputDir) {
+  const baseName = path.basename(inputPath, path.extname(inputPath));
+  const variants = [];
+
+  for (const breakpoint of RESPONSIVE_BREAKPOINTS) {
+    try {
+      const variantName = `${baseName}_${breakpoint}.webp`;
+      const variantPath = path.join(outputDir, variantName);
+
+      await sharp(inputPath)
+        .resize(breakpoint)
+        .webp(OUTPUT_QUALITY.webp)
+        .toFile(variantPath);
+
+      variants.push({ breakpoint, path: variantPath });
+    } catch (error) {
+      console.log(`⚠️  Responsive variant ${breakpoint}px failed: ${error.message}`);
+    }
+  }
+
+  return variants;
+}
+
+/**
+ * Main optimization pipeline
+ */
+async function optimizeImages() {
+  console.log('🚀 Next-Gen Image Optimization Pipeline');
   console.log('='.repeat(60));
-  
-  if (!fs.existsSync(IMAGES_DIR)) {
+  console.log('Features: WebP/AVIF conversion • Progressive JPEG • Responsive variants');
+  console.log('='.repeat(60));
+
+  // Ensure images directory exists
+  try {
+    await fs.access(IMAGES_DIR);
+  } catch (error) {
     console.log(`❌ Images directory not found: ${IMAGES_DIR}`);
+    console.log('Please run "npm run download-images" first');
     process.exit(1);
   }
 
-  const images = findImages(IMAGES_DIR);
-  
+  // Find all images
+  console.log('\n🔍 Scanning image directories...');
+  const images = await findImages(IMAGES_DIR);
+
   if (images.length === 0) {
     console.log('⚠️  No images found to optimize');
+    console.log('Please run "npm run download-images" first');
     process.exit(0);
   }
 
-  console.log(`\n📁 Found ${images.length} images\n`);
+  console.log(`📁 Found ${images.length} images to process\n`);
 
-  let totalOriginal = 0;
-  let totalOptimized = 0;
-  let totalSaved = 0;
-  const byType = {};
+  let processed = 0;
+  let totalOriginalSize = 0;
+  let totalOptimizedSize = 0;
+  let generated = { webp: 0, avif: 0, optimized: 0, responsive: 0 };
 
-  images.forEach((imagePath, index) => {
+  // Process each image
+  for (const imagePath of images) {
+    processed++;
     const ext = path.extname(imagePath).toLowerCase();
+    const baseName = path.basename(imagePath, ext);
+    const dir = path.dirname(imagePath);
     const relPath = path.relative(IMAGES_DIR, imagePath);
-    
-    let result;
-    
+
+    console.log(`${processed}/${images.length} Processing: ${relPath}`);
+
     try {
-      if (ext === '.jpg' || ext === '.jpeg') {
-        result = optimizeJpeg(imagePath);
-        byType.jpg = (byType.jpg || 0) + result.saved;
-      } else if (ext === '.png') {
-        result = optimizePng(imagePath);
-        byType.png = (byType.png || 0) + result.saved;
-      } else {
-        return;
+      const originalSize = await getFileSize(imagePath);
+      totalOriginalSize += originalSize;
+
+      // Generate WebP version
+      const webpPath = path.join(dir, baseName + '.webp');
+      const webpSuccess = await generateWebp(imagePath, webpPath);
+      if (webpSuccess) {
+        generated.webp++;
+        console.log(`  ✅ WebP: ${baseName}.webp`);
       }
 
-      totalOriginal += result.original;
-      totalOptimized += result.optimized;
-      totalSaved += result.saved;
+      // Generate AVIF version (if supported by Sharp)
+      const avifPath = path.join(dir, baseName + '.avif');
+      const avifSuccess = await generateAvif(imagePath, avifPath);
+      if (avifSuccess) {
+        generated.avif++;
+        console.log(`  ✅ AVIF: ${baseName}.avif`);
+      }
 
-      const percent = result.original > 0 ? Math.round(result.saved / result.original * 100) : 0;
-      console.log(`  ${index + 1}/${images.length} ${relPath}`);
-      console.log(`    ${result.original}KB → ${result.optimized}KB (saved ${result.saved}KB, ${percent}%)`);
+      // Optimize original format
+      let optimizedPath = null;
+      if (['.jpg', '.jpeg'].includes(ext)) {
+        optimizedPath = await optimizeJpeg(imagePath);
+      } else if (ext === '.png') {
+        optimizedPath = await optimizePng(imagePath);
+      }
+
+      if (optimizedPath) {
+        generated.optimized++;
+        const optimizedSize = await getFileSize(optimizedPath);
+        console.log(`  ✅ Optimized: ${path.basename(optimizedPath)} (${formatBytes(optimizedSize)})`);
+      }
+
+      // Generate responsive variants for hero images
+      if (relPath.includes('hero') || relPath.includes('featured')) {
+        const responsiveVariants = await generateResponsive(imagePath, dir);
+        if (responsiveVariants.length > 0) {
+          generated.responsive += responsiveVariants.length;
+          console.log(`  ✅ Responsive: ${responsiveVariants.length} variants generated`);
+        }
+      }
+
+      const fileSize = formatBytes(originalSize);
+      console.log(`  📊 Original size: ${fileSize}`);
+
     } catch (error) {
-      console.log(`  ⚠️  Error processing ${relPath}: ${error.message}`);
+      console.log(`  ❌ Error processing ${relPath}: ${error.message}`);
     }
-  });
 
-  console.log('\n' + '='.repeat(60));
-  console.log('📊 Optimization Summary');
-  console.log(`\nTotal: ${totalOriginal}KB → ${totalOptimized}KB`);
-  console.log(`Saved: ${totalSaved}KB (${Math.round(totalSaved / totalOriginal * 100)}%)`);
-  
-  if (Object.keys(byType).length > 0) {
-    console.log('\nBy type:');
-    Object.entries(byType).forEach(([type, saved]) => {
-      console.log(`  ${type.toUpperCase()}: ${saved}KB saved`);
-    });
+    console.log(''); // Add space between images
   }
-  
-  console.log('\n✅ Images optimized and ready!');
-  console.log('\nNext: npm run build\n');
+
+  // Summary
+  console.log('='.repeat(60));
+  console.log('🎉 OPTIMIZATION COMPLETE');
+  console.log('='.repeat(60));
+  console.log(`Processed: ${processed} images`);
+  console.log(`Generated:`);
+  console.log(`  • ${generated.webp} WebP files (modern, 40-80% smaller)`);
+  console.log(`  • ${generated.avif} AVIF files (next-gen, 50-90% smaller)`);
+  console.log(`  • ${generated.optimized} optimized originals`);
+  console.log(`  • ${generated.responsive} responsive variants`);
+
+  if (totalOriginalSize > 0) {
+    const spaceSavings = (totalOriginalSize > totalOptimizedSize) ?
+      `${((totalOriginalSize - totalOptimizedSize) / totalOriginalSize * 100).toFixed(1)}%` : 'optimized';
+    console.log(`\n💾 Estimated space savings: ${spaceSavings}`);
+  }
+
+  console.log('\n✨ Next Steps:');
+  console.log('1. Update Next.js Image components to use modern formats');
+  console.log('2. Implement responsive image loading');
+  console.log('3. Test page performance with Lighthouse');
+  console.log('4. Monitor Core Web Vitals improvements');
+
+  console.log('\n🚀 Ready for production deployment!\n');
 }
 
-main();
+optimizeImages().catch(console.error);

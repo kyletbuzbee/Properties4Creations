@@ -2,12 +2,58 @@ import ModernHero from '@/components/ModernHero';
 import { IconBadge } from '@/components/IconBadge';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import Link from 'next/link';
+import Image from 'next/image';
+import { searchFreepikImages, FreepikImage } from '@/lib/freepik';
 
-export default function Home() {
+export default async function Home() {
+  // Fetch hero image
+  let heroImage: FreepikImage | undefined;
+
+  try {
+    const heroResults = await searchFreepikImages({
+      query: 'veteran housing support community affordable homes',
+      limit: 1,
+      filters: {
+        license: 'free',
+        orientation: 'horizontal',
+      },
+    });
+    heroImage = heroResults.data?.[0];
+  } catch (error) {
+    console.error('Error fetching hero image:', error);
+  }
 
   return (
     <main className="overflow-hidden">
-      <ModernHero />
+      {/* Dynamic Hero with Freepik Image or Fallback */}
+      <section className="relative h-96 overflow-hidden bg-brand-navy">
+        {heroImage && (
+          <Image
+            src={heroImage.preview.url}
+            alt="Housing Solutions"
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+          <h1 className="text-5xl font-bold text-white mb-4">
+            Affordable Housing Solutions
+          </h1>
+          <p className="text-xl text-gray-100 mb-8 max-w-2xl">
+            Supporting veterans and families with quality, stable housing
+          </p>
+          <Link href="/get-started" className="bg-brand-sage hover:bg-brand-sage/90 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+            Get Started Today
+          </Link>
+        </div>
+        {heroImage && (
+          <div className="absolute bottom-0 right-0 bg-black/60 text-white text-xs p-2 text-right">
+            <p>Photo by {heroImage.creator.name}</p>
+          </div>
+        )}
+      </section>
 
       {/* Why Choose Us Section with Icons */}
       <section className="py-20 md:py-32 bg-slate-50">

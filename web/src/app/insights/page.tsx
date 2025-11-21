@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { searchFreepikImages } from '@/lib/freepik';
 
 // Mock article data - replace with real CMS data
 interface Article {
@@ -122,7 +123,38 @@ const categories = [
 const InsightsPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [articleImages, setArticleImages] = useState<Record<string, string>>({});
   const router = useRouter();
+
+  useEffect(() => {
+    // Fetch images for each article
+    const fetchImages = async () => {
+      const queries = [
+        { slug: 'housing-market-recovery-2024', query: 'housing market trends community' },
+        { slug: 'section-8-program-updates', query: 'section 8 housing assistance' },
+        { slug: 'veteran-housing-strategies', query: 'veteran support housing program' },
+      ];
+
+      const images: Record<string, string> = {};
+      for (const item of queries) {
+        try {
+          const results = await searchFreepikImages({
+            query: item.query,
+            limit: 1,
+            filters: { license: 'free' },
+          });
+          if (results.data[0]) {
+            images[item.slug] = results.data[0].preview.url;
+          }
+        } catch (error) {
+          console.error(`Error fetching image for ${item.slug}:`, error);
+        }
+      }
+      setArticleImages(images);
+    };
+
+    fetchImages();
+  }, []);
 
   const filteredArticles = mockArticles.filter(article => {
     const matchesCategory = selectedCategory === 'All' || article.category === selectedCategory;
@@ -275,9 +307,9 @@ const InsightsPage: React.FC = () => {
                   <article key={article.id} className="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-card/80 transition-shadow group">
                     <Link href={`/insights/${article.slug}`}>
                       <div className="aspect-[16/10] bg-slate-200 relative overflow-hidden">
-                        {article.featured_image && (
+                        {(articleImages[article.slug] || article.featured_image) && (
                           <Image
-                            src={article.featured_image}
+                            src={articleImages[article.slug] || article.featured_image || '/api/placeholder/800/400'}
                             alt={article.title}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"

@@ -1,10 +1,24 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ServiceIcon, ServiceIconType } from '@/components/ServiceIcon';
+import { getHousingImages, FreepikImage } from '@/lib/freepik';
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  // Fetch housing images from Freepik
+  let affordableImages: FreepikImage[] = [];
+  let veteranImages: FreepikImage[] = [];
+  let familyImages: FreepikImage[] = [];
+
+  try {
+    [affordableImages, veteranImages, familyImages] = await Promise.all([
+      getHousingImages('affordable', 6),
+      getHousingImages('veteran', 6),
+      getHousingImages('family', 6),
+    ]);
+  } catch (error) {
+    console.error('Error fetching housing images:', error);
+  }
   const resourceCategories = [
     {
       title: "Section 8 Info & Eligibility",
@@ -108,6 +122,89 @@ export default function ResourcesPage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Housing Image Galleries */}
+      <section className="py-16 bg-gradient-to-r from-slate-50 to-slate-100">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Affordable Housing Gallery */}
+          {affordableImages && affordableImages.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-3xl font-bold text-brand-navy mb-2">Affordable Housing Communities</h2>
+              <p className="text-lg text-slate-600 mb-8">Professional housing solutions designed for families seeking stability</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {affordableImages.map((image) => (
+                  image && image.preview && image.preview.url ? (
+                  <div key={image.id} className="group relative h-64 overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <Image
+                      src={image.preview.url}
+                      alt={image.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                      <p className="text-white font-semibold text-sm">{image.title}</p>
+                      <p className="text-gray-200 text-xs">by {image.creator.name}</p>
+                    </div>
+                  </div>
+                  ) : null
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Veteran Housing Gallery */}
+          {veteranImages && veteranImages.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-3xl font-bold text-brand-navy mb-2">Veteran Housing Programs</h2>
+              <p className="text-lg text-slate-600 mb-8">Dedicated housing support and assistance for our nation's veterans</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {veteranImages.map((image) => (
+                  image && image.preview && image.preview.url ? (
+                  <div key={image.id} className="group relative h-64 overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <Image
+                      src={image.preview.url}
+                      alt={image.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                      <p className="text-white font-semibold text-sm">{image.title}</p>
+                      <p className="text-gray-200 text-xs">by {image.creator.name}</p>
+                    </div>
+                  </div>
+                  ) : null
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Family Housing Gallery */}
+          {familyImages && familyImages.length > 0 && (
+            <div>
+              <h2 className="text-3xl font-bold text-brand-navy mb-2">Family Housing Options</h2>
+              <p className="text-lg text-slate-600 mb-8">Quality homes that nurture family growth and stability</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {familyImages.map((image) => (
+                  image && image.preview && image.preview.url ? (
+                  <div key={image.id} className="group relative h-64 overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <Image
+                      src={image.preview.url}
+                      alt={image.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+                      <p className="text-white font-semibold text-sm">{image.title}</p>
+                      <p className="text-gray-200 text-xs">by {image.creator.name}</p>
+                    </div>
+                  </div>
+                  ) : null
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

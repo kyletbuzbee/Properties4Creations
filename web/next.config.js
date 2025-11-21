@@ -64,39 +64,23 @@ const nextConfig = {
     ]
   },
 
-  // Experimental features for better performance
+  // Next.js 15 experimental features for maximum performance (React 19 features removed for stability)
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
+    optimizePackageImports: [
+      '@heroicons/react',
+      'lucide-react',
+      'react-hook-form',
+      'zod'
+    ],
   },
-
-  // Build optimizations
+  // Build optimizations for production
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error']
+      exclude: ['error', 'warn'] // Keep warnings in production for monitoring
     } : false,
   },
-
-  // Bundle analyzer
-  ...(process.env.ANALYZE === 'true' ? {
-    webpack: (config) => {
-      if (typeof config === 'function') {
-        config = config()
-      }
-
-      // Add bundle analyzer
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: 'static',
-          reportFilename: './analyze/client.html',
-          openAnalyzer: false,
-        })
-      )
-
-      return config
-    }
-  } : {}),
 
   // PWA readiness
   poweredByHeader: false,
